@@ -27,4 +27,6 @@ replay_pid*
 target
 
 .idea
-.vscode
+.vscode**/data/
+**/*.mv.db
+**/*.trace.db

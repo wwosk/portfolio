@@ -30,9 +30,8 @@ build/
 !**/src/test/**/build/
 
 ### VS Code ###
-.vscode/
+.vscode
 
-
-data/
-*.mv.db
-*.trace.db
+**/data/
+**/*.mv.db
+**/*.trace.db
