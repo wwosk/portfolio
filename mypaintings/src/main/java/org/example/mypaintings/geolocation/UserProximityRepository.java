@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.List;
 
-//TODO
 
 @Repository
 public interface UserProximityRepository extends JpaRepository<UserProximity, Long> {
