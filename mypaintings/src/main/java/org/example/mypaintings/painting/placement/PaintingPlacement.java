@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.mypaintings.exception.access.UnauthorizedAccessException;
+import org.example.mypaintings.exception.painting.IllegalStateTransitionException;
 import org.example.mypaintings.painting.Painting;
 import org.example.mypaintings.user.User;
 import org.hibernate.annotations.CreationTimestamp;
@@ -45,6 +47,29 @@ public class PaintingPlacement {
     @Column(nullable = false, updatable = false)
     private Instant placementDate;
 
+    public void transitionTo(PlacementStatus nextStatus) {
+        if (!this.placementStatus.canTransitionTo(nextStatus)) {
+            throw new IllegalStateTransitionException(PlacementStatus.class, this, nextStatus);
+        }
+        this.placementStatus = nextStatus;
+        this.archived = nextStatus.isTerminal();
+    }
 
+
+    public static PaintingPlacement startCycle(Painting painting, User hotel) {
+        PaintingPlacement placement = new PaintingPlacement();
+        placement.painting = painting;
+        placement.hotel = hotel;
+        placement.placementStatus = PlacementStatus.IN_DELIVERY_TO_HOTEL;
+        placement.note = "";
+        return placement;
+    }
+
+    public void verifyHotelAccess(long hotelId) {
+        if (!this.hotel.getId().equals(hotelId)) {
+            throw new UnauthorizedAccessException(
+                    "Hotel is not in possession of the painting it tries to manage.");
+        }
+    }
 
 }

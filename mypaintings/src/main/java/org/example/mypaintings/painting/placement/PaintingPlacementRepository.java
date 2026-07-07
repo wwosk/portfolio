@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface PaintingPlacementRepository extends JpaRepository<PaintingPlacement,Long> {
     Optional<PaintingPlacement> findByPaintingIdAndArchivedFalse(Long paintingId);
-
+    boolean existsByPaintingIdAndArchivedFalse(long paintingId);
 }

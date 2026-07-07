@@ -1,6 +1,9 @@
 package org.example.mypaintings.painting.placement;
 
 
+import java.util.EnumSet;
+import java.util.Set;
+
 public enum PlacementStatus {
     IN_DELIVERY_TO_HOTEL,
     EXHIBITED,
@@ -51,6 +54,21 @@ public enum PlacementStatus {
     public boolean isInStateForReservationRevoke() {
         return this==IN_DELIVERY_TO_HOTEL;
     }
+
+    private static final Set<PlacementStatus> TERMINAL = EnumSet.of(
+            RECEIVED_BY_CLIENT, RETURNED_TO_ARTIST, REVOKED_RESERVATION
+    );
+
+    public boolean isTerminal() {
+        return TERMINAL.contains(this);
+    }
+
+    public boolean isSoldAndNotObtainedStatus() {
+        return this == PlacementStatus.WAITING_FOR_RECEPTION_BY_CLIENT ||
+                this == PlacementStatus.WAITING_FOR_SHIPPING_TO_CLIENT ||
+                this == PlacementStatus.SENT_BY_HOTEL_TO_CLIENT;
+    }
+
 
 
 }
