@@ -70,5 +70,9 @@ public enum PlacementStatus {
     }
 
 
+    public boolean isSoldStatus() {
+        return isSoldAndNotObtainedStatus() || this == PlacementStatus.RECEIVED_BY_CLIENT;
+    }
+
 
 }

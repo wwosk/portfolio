@@ -21,6 +21,9 @@ public class ReservationQueryService {
                 .orElseThrow(() -> new ResourceNotFoundException(ReservationOffer.class, "Id: " + offerId));
     }
 
-
+    public boolean hasActiveReservation(long paintingId) {
+        log.debug("Checking if painting ID: {} has an active accepted reservation", paintingId);
+        return reservationOfferRepository.existsByPaintingIdAndStatus(paintingId, ReservationStatus.ACCEPTED);
+    }
 
 }

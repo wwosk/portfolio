@@ -38,7 +38,11 @@ public class UserQueryService {
                 .collect(Collectors.toList());
     }
 
-
+    public User getValidArtistOrThrow(long userId) {
+        User user = userRepository.getOrThrow(userId);
+        user.validateRoleOrThrow(UserRole.ARTIST);
+        return user;
+    }
 
 
 }

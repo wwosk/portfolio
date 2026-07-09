@@ -6,6 +6,9 @@ import org.example.mypaintings.exception.notfound.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -23,7 +26,17 @@ public class PaintingPlacementQueryService {
                 });
     }
 
+    public boolean isSold(long paintingId) {
+        List<PlacementStatus> soldStatuses = Arrays.stream(PlacementStatus.values())
+                .filter(PlacementStatus::isSoldStatus)
+                .toList();
 
+        return paintingPlacementRepository.existsByPaintingIdAndArchivedFalseAndPlacementStatusIn(paintingId, soldStatuses);
+    }
+
+    public boolean isCurrentlyPlaced(long paintingId) {
+        return paintingPlacementRepository.existsByPaintingIdAndArchivedFalse(paintingId);
+    }
 
 
 }

@@ -21,7 +21,19 @@ public class PaintingQueryService {
                 .orElseThrow(() -> new ResourceNotFoundException(Painting.class, paintingId));
     }
 
+    @Transactional(readOnly = true)
+    public Painting getActiveWithDetailsOrThrow(long paintingId) {
+        Painting painting = paintingRepository.getWithDetailsOrThrow(paintingId);
+        ensureNotArchived(painting);
+        return painting;
+    }
 
+    private void ensureNotArchived(Painting painting) {
+        if (painting.isArchived()) {
+            log.warn("Attempt to process archived painting ID: {}", painting.getId());
+            throw new IllegalStateException("Painting is archived and cannot be processed!");
+        }
+    }
 
 
 }
