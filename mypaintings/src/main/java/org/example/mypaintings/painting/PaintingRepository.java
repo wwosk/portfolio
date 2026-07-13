@@ -33,4 +33,10 @@ public interface PaintingRepository extends JpaRepository<Painting, Long>, JpaSp
     }
 
 
+    default Painting getOrThrow(Long id) {
+        return findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(Painting.class,id));
+    }
+
+
 }

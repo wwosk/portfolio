@@ -45,4 +45,15 @@ public class UserQueryService {
     }
 
 
+    public UserRole getUserRole(long userId) {
+        return userRepository.getOrThrow(userId).getRole();
+    }
+
+    public User getUserReference(long userId) {
+        return userRepository.getReferenceById(userId);
+    }
+
+
+
+
 }

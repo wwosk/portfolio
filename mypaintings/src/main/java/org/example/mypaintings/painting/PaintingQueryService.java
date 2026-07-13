@@ -35,5 +35,15 @@ public class PaintingQueryService {
         }
     }
 
+    public Painting getOrThrow(long paintingId) {
+        return paintingRepository.getOrThrow(paintingId);
+    }
+
+    @Transactional(readOnly = true)
+    public Painting getActiveOrThrow(long paintingId) {
+        Painting painting = paintingRepository.getOrThrow(paintingId);
+        ensureNotArchived(painting);
+        return painting;
+    }
 
 }
