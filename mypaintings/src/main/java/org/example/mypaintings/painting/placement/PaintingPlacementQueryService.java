@@ -38,5 +38,10 @@ public class PaintingPlacementQueryService {
         return paintingPlacementRepository.existsByPaintingIdAndArchivedFalse(paintingId);
     }
 
+    public List<PaintingPlacement> getOrdersNeedingActionForHotel(long hotelId) {
+        List<PlacementStatus> actionRequiredForSaleStatuses = PlacementStatus.getActionRequiredForSaleProcessing();
+        return  paintingPlacementRepository.findByHotelIdAndPlacementStatusInWithPaintingAndAttachments(hotelId, actionRequiredForSaleStatuses);
+    }
+
 
 }

@@ -1,8 +1,11 @@
 package org.example.mypaintings.painting.placement;
 
 
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public enum PlacementStatus {
     IN_DELIVERY_TO_HOTEL,
@@ -74,5 +77,30 @@ public enum PlacementStatus {
         return isSoldAndNotObtainedStatus() || this == PlacementStatus.RECEIVED_BY_CLIENT;
     }
 
+    public static List<PlacementStatus> getActionRequiredForSaleProcessing() {
+        return Arrays.stream(PlacementStatus.values())
+                .filter(PlacementStatus::isSoldAndNotObtainedStatus)
+                .toList();
+    }
+
+    public List<PlacementStatus> getPossibleTransitionsForHotel() {
+        return getPossibleTransitions().stream()
+                .filter(HOTEL_ACTIONS::contains)
+                .toList();
+    }
+
+
+    public List<PlacementStatus> getPossibleTransitions() {
+        return Arrays.stream(PlacementStatus.values())
+                .filter(this::canTransitionTo)
+                .collect(Collectors.toList());
+    }
+
+    private static final Set<PlacementStatus> HOTEL_ACTIONS = Set.of(
+            EXHIBITED,
+            RECEIVED_BY_CLIENT,
+            SENT_BY_HOTEL_TO_CLIENT,
+            SENT_BY_HOTEL_TO_ARTIST
+    );
 
 }
