@@ -54,9 +54,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             Long userId = decodedJWT.getClaim("userId").asLong();
 
             var authToken = getAuthToken(role, userId);
-            // KLUCZOWE: RateLimitingAspect czyta details jako Long, żeby kluczować
-            // bucket po userId, a nie po IP. Bez tego wielu userów za NAT-em
-            // dzieliłoby jeden bucket.
             authToken.setDetails(userId);
 
             SecurityContextHolder.getContext().setAuthentication(authToken);

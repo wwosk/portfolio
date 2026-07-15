@@ -20,7 +20,6 @@ import static org.example.mypaintings.security.SecurityUtils.getClientIP;
 @Component
 public class LoginFailureAspect {
 
-    /** Maksymalny wykładnik backoffu — 2^6 = 64 min. */
     private static final int MAX_BACKOFF_EXPONENT = 6;
 
     private final Clock clock;
@@ -60,13 +59,11 @@ public class LoginFailureAspect {
             return handleFailure(clientKey, loginRateLimited, e);
         }
 
-        // sukces → reset stanu
         failureCounts.invalidate(clientKey);
         lockouts.invalidate(clientKey);
         return result;
     }
 
-    // ---------- lockout check ----------
 
     private boolean isLockedOut(String clientKey) {
         Instant lockoutUntil = lockouts.getIfPresent(clientKey);
@@ -76,7 +73,6 @@ public class LoginFailureAspect {
         if (clock.instant().isBefore(lockoutUntil)) {
             return true;
         }
-        // lockout wygasł — posprzątaj
         lockouts.invalidate(clientKey);
         return false;
     }
@@ -91,7 +87,6 @@ public class LoginFailureAspect {
                 "Too many login attempts try in " + secondsLeft + " seconds.");
     }
 
-    // ---------- failure handling ----------
 
     private Object handleFailure(String clientKey,
                                  LoginRateLimited annotation,
@@ -113,19 +108,15 @@ public class LoginFailureAspect {
                         + backoffMinutes + " minutes.");
     }
 
-    /**
-     * Backoff rośnie wykładniczo: 2^1, 2^2, ... aż do 2^6 = 64 min.
-     * Przy pierwszym lockoucie (attempts == maxAttempts) → 2 min.
-     */
+
     static long computeBackoffMinutes(int attempts, int maxAttempts) {
         int excessAttempts = attempts - maxAttempts + 1;
         int exponent = Math.min(excessAttempts, MAX_BACKOFF_EXPONENT);
-        // ochrona przed ujemnym wykładnikiem (gdyby ktoś wywołał z attempts < maxAttempts)
         exponent = Math.max(exponent, 1);
         return (long) Math.pow(2, exponent);
     }
 
-    // ---------- key building ----------
+
 
     private static String buildClientKey(ProceedingJoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().toShortString();
