@@ -38,5 +38,7 @@ public interface PaintingRepository extends JpaRepository<Painting, Long>, JpaSp
                 new ResourceNotFoundException(Painting.class,id));
     }
 
+    long countByArtistId(long artistId);
+
 
 }

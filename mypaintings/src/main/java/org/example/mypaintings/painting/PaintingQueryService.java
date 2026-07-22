@@ -46,4 +46,11 @@ public class PaintingQueryService {
         return painting;
     }
 
+
+    @Transactional(readOnly = true)
+    public long getArtistPaintingCount(long artistId) {
+        return paintingRepository.countByArtistId(artistId);
+    }
+
+
 }
