@@ -103,4 +103,32 @@ public enum PlacementStatus {
             SENT_BY_HOTEL_TO_ARTIST
     );
 
+    public static Set<PlacementStatus> getTerminalStatuses() {
+        return TERMINAL;
+    }
+
+    private static final Set<PlacementStatus> ARTIST_ACTIONS = Set.of(
+            WAITING_FOR_SHIPPING_TO_ARTIST,
+            WAITING_FOR_RECEPTION_BY_ARTIST,
+            RETURNED_TO_ARTIST
+    );
+
+    public List<PlacementStatus> getPossibleTransitionsForArtist() {
+        return getPossibleTransitions().stream()
+                .filter(ARTIST_ACTIONS::contains)
+                .toList();
+    }
+
+    public static List<PlacementStatus> getOnStockOrResponsibleStatuses() {
+        return List.of(
+                IN_DELIVERY_TO_HOTEL,
+                EXHIBITED,
+                WAITING_FOR_SHIPPING_TO_ARTIST,
+                WAITING_FOR_RECEPTION_BY_ARTIST,
+                SENT_BY_HOTEL_TO_ARTIST
+        );
+    }
+
+
+
 }

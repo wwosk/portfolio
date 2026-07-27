@@ -6,6 +6,7 @@ import org.example.mypaintings.exception.notfound.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 
 
 @Service
@@ -52,5 +53,9 @@ public class PaintingQueryService {
         return paintingRepository.countByArtistId(artistId);
     }
 
+    @Transactional(readOnly = true)
+    public List<Painting> getAllArtistPaintings(long artistId) {
+        return paintingRepository.findAllByArtistIdWithAttachments(artistId);
+    }
 
 }

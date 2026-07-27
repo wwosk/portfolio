@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -39,6 +40,9 @@ public interface PaintingRepository extends JpaRepository<Painting, Long>, JpaSp
     }
 
     long countByArtistId(long artistId);
+
+    @Query("SELECT DISTINCT p FROM Painting p LEFT JOIN FETCH p.attachments WHERE p.artist.id = :artistId")
+    List<Painting> findAllByArtistIdWithAttachments(@Param("artistId") long artistId);
 
 
 }

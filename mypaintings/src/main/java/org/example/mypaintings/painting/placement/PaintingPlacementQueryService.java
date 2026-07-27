@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional(readOnly = true)
@@ -43,5 +44,21 @@ public class PaintingPlacementQueryService {
         return  paintingPlacementRepository.findByHotelIdAndPlacementStatusInWithPaintingAndAttachments(hotelId, actionRequiredForSaleStatuses);
     }
 
+    public List<PaintingPlacement> getActivePlacementsForArtist(long artistId) {
+        return paintingPlacementRepository
+                .findAllActiveByPaintingArtistIdWithPaintingAndAttachments(artistId, PlacementStatus.getTerminalStatuses());
+    }
+
+    public Set<Long> findPaintingIdsCurrentlyPlaced(List<Long> paintingIds) {
+        if (paintingIds == null || paintingIds.isEmpty()) {
+            return Set.of();
+        }
+        return paintingPlacementRepository.findPaintingIdsCurrentlyPlaced(paintingIds);
+    }
+
+    public List<PaintingPlacement> getPaintingsOnStockForHotel(long hotelId) {
+        List<PlacementStatus> onStockStatuses = PlacementStatus.getOnStockOrResponsibleStatuses();
+        return paintingPlacementRepository.findByHotelIdAndPlacementStatusInWithPaintingAndAttachments(hotelId, onStockStatuses);
+    }
 
 }

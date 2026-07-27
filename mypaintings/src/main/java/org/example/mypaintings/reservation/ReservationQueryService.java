@@ -6,6 +6,9 @@ import org.example.mypaintings.exception.notfound.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Set;
+
 
 @Slf4j
 @Service
@@ -25,5 +28,21 @@ public class ReservationQueryService {
         log.debug("Checking if painting ID: {} has an active accepted reservation", paintingId);
         return reservationOfferRepository.existsByPaintingIdAndStatus(paintingId, ReservationStatus.ACCEPTED);
     }
+
+    public List<ReservationOffer> getOffersByArtistId(long artistId) {
+        return reservationOfferRepository.findAllByPaintingArtistIdWithPaintingAndAttachments(artistId);
+    }
+
+    public Set<Long> findPaintingIdsWithActiveReservations(List<Long> paintingIds) {
+        if (paintingIds == null || paintingIds.isEmpty()) {
+            return Set.of();
+        }
+        return reservationOfferRepository.findPaintingIdsWithActiveReservations(paintingIds);
+    }
+
+    public List<ReservationOffer> getOffersByHotelId(long hotelId) {
+        return reservationOfferRepository.findAllByHotelIdWithPaintingAndAttachments(hotelId);
+    }
+
 
 }

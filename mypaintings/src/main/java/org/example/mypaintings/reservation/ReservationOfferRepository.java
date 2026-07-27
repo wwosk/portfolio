@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 public interface ReservationOfferRepository extends JpaRepository<ReservationOffer, Long> {
@@ -39,6 +40,20 @@ public interface ReservationOfferRepository extends JpaRepository<ReservationOff
 
 
     Optional<ReservationOffer> findByHotelIdAndPaintingId(Long hotelId, Long paintingId);
+
+    @Query("SELECT o FROM ReservationOffer o JOIN FETCH o.painting p LEFT JOIN FETCH p.attachments WHERE p.artist.id = :artistId")
+    List<ReservationOffer> findAllByPaintingArtistIdWithPaintingAndAttachments(@Param("artistId") long artistId);
+
+
+    @Query("SELECT r.painting.id FROM ReservationOffer r WHERE r.painting.id IN :paintingIds AND r.status = 'ACCEPTED'")
+    Set<Long> findPaintingIdsWithActiveReservations(@Param("paintingIds") List<Long> paintingIds);
+
+    @Query("SELECT o FROM ReservationOffer o " +
+            "JOIN FETCH o.painting p " +
+            "LEFT JOIN FETCH p.attachments " +
+            "JOIN FETCH p.artist " +
+            "WHERE o.hotel.id = :hotelId")
+    List<ReservationOffer> findAllByHotelIdWithPaintingAndAttachments(@Param("hotelId") long hotelId);
 
 
 }
