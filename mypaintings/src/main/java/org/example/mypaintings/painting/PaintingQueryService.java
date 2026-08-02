@@ -3,6 +3,9 @@ package org.example.mypaintings.painting;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.mypaintings.exception.notfound.ResourceNotFoundException;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,6 +59,16 @@ public class PaintingQueryService {
     @Transactional(readOnly = true)
     public List<Painting> getAllArtistPaintings(long artistId) {
         return paintingRepository.findAllByArtistIdWithAttachments(artistId);
+    }
+
+    @Transactional(readOnly = true)
+    public Slice<Painting> getPaintingSlicesBySpecification(Specification<Painting> spec, Pageable pageable) {
+        return paintingRepository.findAll(spec, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Painting> getPaintingsWithDetailsByIds(List<Long> paintingIds) {
+        return paintingRepository.findAllByIdsWithDetails(paintingIds);
     }
 
 }

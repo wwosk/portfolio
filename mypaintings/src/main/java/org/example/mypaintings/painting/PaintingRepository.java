@@ -45,4 +45,12 @@ public interface PaintingRepository extends JpaRepository<Painting, Long>, JpaSp
     List<Painting> findAllByArtistIdWithAttachments(@Param("artistId") long artistId);
 
 
+
+    @Query("SELECT DISTINCT p FROM Painting p " +
+            "LEFT JOIN FETCH p.attachments " +
+            "LEFT JOIN FETCH p.artist " +
+            "LEFT JOIN FETCH p.styles " +
+            "WHERE p.id IN :ids")
+    List<Painting> findAllByIdsWithDetails(@Param("ids") List<Long> ids);
+
 }
