@@ -65,6 +65,9 @@ public class User {
     }
 
     public User(UserRole role, String nickname, String fullAddress, double latitude, double longitude) {
+        if (role == null) {
+            throw new BusinessValidationException("Role cannot be null");
+        }
         changeNickname(nickname);
         this.role = role;
         addAddressAndCoordinates(fullAddress, latitude, longitude);
@@ -74,8 +77,9 @@ public class User {
         if (address == null || address.isBlank()) {
             throw new BusinessValidationException("Address cannot be null or empty");
         }
+        Coordinates newCoordinates = new Coordinates(latitude, longitude);
         this.fullAddress = address;
-        this.coordinates = new Coordinates(latitude, longitude);
+        this.coordinates = newCoordinates;
     }
 
     public void validateRoleOrThrow(UserRole requiredRole) {
