@@ -24,7 +24,7 @@ public class Coordinates {
 
     public Coordinates(double latitude, double longitude) {
 
-        if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
+        if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180 || Double.isNaN(latitude) || Double.isNaN(longitude)) {
             throw new BusinessValidationException("Invalid geographic coordinates");
         }
         this.latitude = latitude;
