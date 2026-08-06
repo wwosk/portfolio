@@ -24,7 +24,7 @@ public class Dimensions {
     Unit unit;
 
     public Dimensions(double width, double height, Unit unit) {
-        if (width <= 0 || height <= 0) {
+        if (width <= 0 || height <= 0 || Double.isNaN(width) || Double.isNaN(height)) {
             throw new BusinessValidationException("Invalid dimensions");
         }
         if (unit == null) {
