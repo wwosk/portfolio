@@ -31,15 +31,13 @@ public class PaintingStyleService {
     private long officialThreshold;
 
     @Transactional
-    public StyleResponse getOrCreateStyle(String name) {
-        String trimmedName = name.trim();
-        String normalized = trimmedName.toLowerCase();
-
+    public StyleResponse getOrCreateStyle(String styleName) {
+        String normalized = styleName != null ? styleName.trim().toLowerCase() : "";
         PaintingStyle style = styleRepository.findByNormalizedName(normalized)
                 .orElseGet(() -> {
                     try {
                         return styleRepository.save(
-                                new PaintingStyle(trimmedName, normalized)
+                                new PaintingStyle(styleName)
                         );
                     } catch (DataIntegrityViolationException e) {
                         return styleRepository.findByNormalizedName(normalized)
