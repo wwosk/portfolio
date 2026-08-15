@@ -1,6 +1,7 @@
 package org.example.mypaintings.user;
 
 import lombok.RequiredArgsConstructor;
+import org.example.mypaintings.exception.validation.BusinessValidationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,11 +23,13 @@ public class UserQueryService {
     }
 
     public List<User> getHotelsInArea(double minLat, double maxLat, double minLon, double maxLon) {
+        validateAreaCoordinates(minLat, maxLat, minLon, maxLon);
         return userRepository.findHotelsInArea(minLat, maxLat, minLon, maxLon);
     }
 
 
     public List<User> getArtistsInArea(double minLat, double maxLat, double minLon, double maxLon) {
+        validateAreaCoordinates(minLat, maxLat, minLon, maxLon);
         return userRepository.findArtistsInArea(minLat, maxLat, minLon, maxLon);
     }
 
@@ -53,7 +56,14 @@ public class UserQueryService {
         return userRepository.getReferenceById(userId);
     }
 
-
+    private void validateAreaCoordinates(double minLat, double maxLat, double minLon, double maxLon) {
+        if (minLat > maxLat || minLon > maxLon) {
+            throw new BusinessValidationException("Minimum coordinates cannot be greater than maximum coordinates");
+        }
+        if (minLat < -90 || maxLat > 90 || minLon < -180 || maxLon > 180) {
+            throw new BusinessValidationException("Coordinates are out of valid geographical bounds");
+        }
+    }
 
 
 }
