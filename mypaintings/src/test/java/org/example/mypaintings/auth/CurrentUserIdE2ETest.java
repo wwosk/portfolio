@@ -1,8 +1,7 @@
-package org.example.mypaintings.auth.jwt;
+package org.example.mypaintings.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.mypaintings.auth.CurrentUserArgumentResolver;
-import org.example.mypaintings.auth.CurrentUserId;
+import org.example.mypaintings.auth.jwt.JwtService;
 import org.example.mypaintings.config.WebConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

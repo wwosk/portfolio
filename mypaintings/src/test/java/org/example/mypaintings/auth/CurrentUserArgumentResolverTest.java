@@ -1,7 +1,5 @@
-package org.example.mypaintings.auth.jwt;
+package org.example.mypaintings.auth;
 
-import org.example.mypaintings.auth.CurrentUserArgumentResolver;
-import org.example.mypaintings.auth.CurrentUserId;
 import org.example.mypaintings.exception.access.UnauthorizedAccessException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
