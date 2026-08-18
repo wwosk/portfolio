@@ -30,3 +30,6 @@ target
 .vscode**/data/
 **/*.mv.db
 **/*.trace.db
+
+.env
+.env.local
