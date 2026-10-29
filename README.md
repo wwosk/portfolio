@@ -160,6 +160,8 @@ mvnw spring-boot:run
 
 Spring Boot Docker Compose will automatically start the required Redis container on startup.
 
+Remember to set any required properties in application.properties
+
   
 
 **Access API Documentation:**
